@@ -1,24 +1,40 @@
 package ru.javaops.masterjava.matrix;
 
+import java.util.List;
 import java.util.Random;
-import java.util.concurrent.CompletionService;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-/**
- * gkislin
- * 03.07.2016
- */
 public class MatrixUtil {
 
-    // TODO implement parallel multiplication matrixA*matrixB
     public static int[][] concurrentMultiply(int[][] matrixA, int[][] matrixB, ExecutorService executor) throws InterruptedException, ExecutionException {
         final int matrixSize = getLength(matrixA);
         final int[][] matrixC = new int[matrixSize][matrixSize];
-        final CompletionService<Integer> completionService = new ExecutorCompletionService<>(executor);
-        int[] thatColumn = new int[matrixSize];
 
+        List<Callable<Void>> tasks = IntStream.range(0, matrixSize)
+                .mapToObj(j -> new Callable<Void>() {
+                    int[] thatColumn = new int[matrixSize];
+                    @Override
+                    public Void call() {
+                        for (int k = 0; k < matrixSize; k++) {
+                            thatColumn[k] = matrixB[k][j];
+                        }
+                        for (int i = 0; i < matrixSize; i++) {
+                            int[] thisRow = matrixA[i];
+                            int sum = 0;
+                            for (int k = 0; k < matrixSize; k++) {
+                                sum += thisRow[k] * thatColumn[k];
+                            }
+                            matrixC[i][j] = sum;
+                        }
+                        return null;
+                    }
+                })
+                .collect(Collectors.toList());
+        executor.invokeAll(tasks);
         return matrixC;
     }
 
@@ -34,35 +50,17 @@ public class MatrixUtil {
             for (int i = 0; i < matrixSize; i++) {
                 int[] thisRow = matrixA[i];
                 int sum = 0;
-                sum = getMatrixElement(matrixSize, thatColumn, thisRow, sum);
+                for (int k = 0; k < matrixSize; k++) {
+                    sum += thisRow[k] * thatColumn[k];
+                }
                 matrixC[i][j] = sum;
             }
         }
         return matrixC;
     }
 
-    private static int getMatrixElement(int matrixSize, int[] thatColumn, int[] thisRow, int sum) {
-        for (int k = 0; k < matrixSize; k++) {
-            sum += thisRow[k] * thatColumn[k];
-        }
-        return sum;
-    }
-
     private static int getLength(int[][] matrixA) {
         return matrixA.length;
-    }
-
-    private static int[][] transpositionMatrix(int[][] matrix) {
-        int matrixSize = getLength(matrix);
-        int[][] result = new int[matrixSize][matrixSize];
-        for (int i = 0; i < matrixSize; i++) {
-            for (int j = 0; j < matrixSize; j++) {
-                result[j][i] = matrix[i][j];
-            }
-        }
-//        System.out.println("After transposition action:");
-//        MainMatrix.printMatrix(result);
-        return result;
     }
 
     public static int[][] create(int size) {
