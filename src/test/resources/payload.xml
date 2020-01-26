@@ -1,23 +1,44 @@
 <Payload xmlns="http://javaops.ru"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://javaops.ru payload.xsd">
-    <Users>
-        <User flag="active" city="kiv">
-            <email>gmail@gmail.com</email>
-            <fullName>Full Name</fullName>
-        </User>
-        <User flag="superuser" city="spb">
-            <email>admin@javaops.ru</email>
-            <fullName>Admin</fullName>
-        </User>
-        <User flag="deleted" city="spb">
-            <email>mail@yandex.ru</email>
-            <fullName>Deleted</fullName>
-        </User>
-    </Users>
+    <Projects>
+        <Project name="topjava">
+            <Group name="topjava06" type="FINISHED"/>
+            <Group name="topjava07" type="FINISHED"/>
+            <Group name="topjava08" type="CURRENT"/>
+        </Project>
+        <Project name="masterjava">
+            <Group name="masterjava" type="CURRENT"/>
+        </Project>
+    </Projects>
+
     <Cities>
         <City id="spb">Санкт-Петербург</City>
         <City id="kiv">Киев</City>
         <City id="mnsk">Минск</City>
     </Cities>
+
+    <Users>
+        <User flag="active" city="kiv" email="gmail@gmail.com">
+            <fullName>Alex</fullName>
+        </User>
+        <User flag="active" city="kiv" email="gmail@gmail.com">
+            <fullName>Peter</fullName>
+        </User>
+        <User flag="active" city="kiv" email="gmail@gmail.com">
+            <fullName>Mike</fullName>
+        </User>
+        <User flag="active" city="kiv" email="gmail@gmail.com">
+            <fullName>John</fullName>
+        </User>
+        <User flag="active" city="kiv" email="gmail@gmail.com">
+            <fullName>David</fullName>
+        </User>
+        <User flag="superuser" city="spb" email="admin@javaops.ru">
+            <fullName>Admin</fullName>
+        </User>
+        <User flag="deleted" city="spb" email="mail@yandex.ru">
+            <fullName>Deleted</fullName>
+        </User>
+    </Users>
 </Payload>
