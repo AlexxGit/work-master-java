@@ -3,12 +3,14 @@
          xsi:schemaLocation="http://javaops.ru payload.xsd">
     <Projects>
         <Project name="topjava">
+            <description>Top Java</description>
             <Group name="topjava06" type="FINISHED"/>
             <Group name="topjava07" type="FINISHED"/>
             <Group name="topjava08" type="CURRENT"/>
         </Project>
         <Project name="masterjava">
-            <Group name="masterjava" type="CURRENT"/>
+            <description>Master Java</description>
+            <Group name="masterjava01" type="CURRENT"/>
         </Project>
     </Projects>
 
@@ -16,29 +18,15 @@
         <City id="spb">Санкт-Петербург</City>
         <City id="kiv">Киев</City>
         <City id="mnsk">Минск</City>
+        <City id="mow">Москва</City>
     </Cities>
 
     <Users>
-        <User flag="active" city="kiv" email="gmail@gmail.com">
-            <fullName>Alex</fullName>
-        </User>
-        <User flag="active" city="kiv" email="gmail@gmail.com">
-            <fullName>Peter</fullName>
-        </User>
-        <User flag="active" city="kiv" email="gmail@gmail.com">
-            <fullName>Mike</fullName>
-        </User>
-        <User flag="active" city="kiv" email="gmail@gmail.com">
-            <fullName>John</fullName>
-        </User>
-        <User flag="active" city="kiv" email="gmail@gmail.com">
-            <fullName>David</fullName>
-        </User>
-        <User flag="superuser" city="spb" email="admin@javaops.ru">
-            <fullName>Admin</fullName>
-        </User>
-        <User flag="deleted" city="spb" email="mail@yandex.ru">
-            <fullName>Deleted</fullName>
-        </User>
+        <User flag="active" city="kiv" email="gmail@gmail.com" groupRefs="topjava07 masterjava01">Full Name</User>
+        <User flag="active" city="spb" email="admin@javaops.ru" groupRefs="topjava07 topjava07 masterjava01">Admin</User>
+        <User flag="active" city="spb" email="deleted@yandex.com">Deleted</User>
+        <User flag="active" city="mow" email="user1@gmail.com" groupRefs="masterjava01 topjava06">User1</User>
+        <User flag="active" city="kiv" email="user2@yandex.ru" groupRefs="masterjava01">User2</User>
+        <User flag="active" city="mnsk" email="user3@yandex.ru" groupRefs="masterjava01">User3</User>
     </Users>
 </Payload>

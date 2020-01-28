@@ -32,6 +32,33 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="Project">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element type="xs:string" name="description"/>
+                <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                    <xs:element name="Group">
+                        <xs:complexType>
+                            <xs:attribute type="xs:ID" name="name" use="required"/>
+                            <xs:attribute type="groupType" name="type" use="required"/>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:sequence>
+            <xs:attribute type="xs:string" name="name" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="City" type="cityType"/>
+
+    <xs:complexType name="cityType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:ID" name="id" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
     <xs:element name="User">
         <xs:complexType>
             <xs:simpleContent>
@@ -45,25 +72,12 @@
         </xs:complexType>
     </xs:element>
 
-<!--    https://stackoverflow.com/questions/2147780/how-to-validate-an-email-id-in-xml-schema/2147904#2147904-->
+    <!--    https://stackoverflow.com/questions/2147780/how-to-validate-an-email-id-in-xml-schema/2147904#2147904-->
     <xs:simpleType name="emailAddressType">
         <xs:restriction base="xs:string">
             <xs:pattern value="([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})"/>
         </xs:restriction>
     </xs:simpleType>
-
-    <xs:element name="Project">
-        <xs:complexType>
-            <xs:element type="xs:string" name="description"/>
-            <xs:sequence>
-                <xs:element name="Group">
-                    <xs:attribute type="xs:ID" name="name" use="required"/>
-                    <xs:attribute type="groupType" name="name" use="required"/>
-                </xs:element>
-            </xs:sequence>
-            <xs:attribute type="xs:string" name="name" use="required"/>
-        </xs:complexType>
-    </xs:element>
 
     <xs:simpleType name="flagType">
         <xs:restriction base="xs:string">
@@ -80,14 +94,4 @@
             <xs:enumeration value="FINISHED"/>
         </xs:restriction>
     </xs:simpleType>
-
-    <xs:element name="City" type="cityType"/>
-
-    <xs:complexType name="cityType">
-        <xs:simpleContent>
-            <xs:extension base="xs:string">
-                <xs:attribute type="xs:ID" name="id" use="required"/>
-            </xs:extension>
-        </xs:simpleContent>
-    </xs:complexType>
 </xs:schema>
