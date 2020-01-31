@@ -42,7 +42,7 @@ public class MainXml {
 
         Set<User> usersByStax = parseXmlFileWithStax(project, payloadURL);
         System.out.println("users by stax:");
-        users.forEach(u -> System.out.println("Name " + u.getValue() + ", email " + u.getEmail()));
+        usersByStax.forEach(u -> System.out.println("Name " + u.getValue() + ", email " + u.getEmail()));
     }
 
     private static Set<User> parseXmlFileWithStax(String projectName, URL payloadURL) throws Exception {
