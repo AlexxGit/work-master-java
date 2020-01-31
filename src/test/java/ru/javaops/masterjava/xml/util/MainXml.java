@@ -1,6 +1,7 @@
 package ru.javaops.masterjava.xml.util;
 
 import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import com.google.common.io.Resources;
 import j2html.tags.ContainerTag;
 import one.util.streamex.StreamEx;
@@ -27,6 +28,7 @@ public class MainXml {
     private static final String PROJECT = "Project";
     private static final String GROUP = "Group";
     private static final String USERS = "Users";
+    private static final String PROJECTS = "Projects";
 
     public static void main(String[] args) throws Exception {
         System.out.format("Hello MasterJava!");
@@ -53,15 +55,12 @@ public class MainXml {
             String element;
 
             //Projects loop
-            projects:
-            while (processor.doUntil(XMLEvent.START_ELEMENT, PROJECT)) {
+            while (processor.startElement(PROJECT, PROJECTS)) {
                 if (projectName.equals(processor.getAttribute("name"))) {
-                    while ((element = processor.doUntilAny(XMLEvent.START_ELEMENT, PROJECT, GROUP, USERS)) != null) {
-                        if (!element.equals(GROUP)) {
-                            break projects;
-                        }
+                    while (processor.startElement(GROUP, PROJECT)) {
                         groupNames.add(processor.getAttribute("name"));
                     }
+                    break;
                 }
             }
             if (groupNames.isEmpty()) {
@@ -69,19 +68,12 @@ public class MainXml {
             }
 
             //Users loop
+            JaxbParser jaxbParser = new JaxbParser(User.class);
             while (processor.doUntil(XMLEvent.START_ELEMENT, "User")) {
                 String groupRefs = processor.getAttribute("groupRefs");
-                if (groupRefs == null || groupRefs.equals("")) {
-                    continue;
-                }
-                for (String ref : Splitter.on(' ').split(groupRefs)) {
-                    if (groupNames.contains(ref)) {
-                        User user = new User();
-                        user.setEmail(processor.getAttribute("email"));
-                        user.setValue(processor.getReader().getElementText());
-                        users.add(user);
-                        break;
-                    }
+                if (!Collections.disjoint(groupNames, Splitter.on(' ').splitToList(Strings.nullToEmpty(groupRefs)))) {
+                    User user = jaxbParser.unmarshal(processor.getReader(), User.class);
+                    users.add(user);
                 }
             }
             return users;
