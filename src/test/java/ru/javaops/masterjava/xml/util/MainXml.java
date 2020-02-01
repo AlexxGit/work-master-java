@@ -35,16 +35,32 @@ public class MainXml {
         System.out.println();
 
         URL payloadURL = Resources.getResource(args[0]);
-        String project = args[1];
+        String projectName = args[1];
 
-        Set<User> users = parseXmlFileWithJaxb(project, payloadURL);
-        final String s = outHtml(users, project, Paths.get("users.html"));
+        Set<User> users = parseXmlFileWithJaxb(projectName, payloadURL);
+        final String s = outHtml(users, projectName, Paths.get("users.html"));
         System.out.println("users by jaxb:");
         System.out.println(s);
 
-        Set<User> usersByStax = parseXmlFileWithStax(project, payloadURL);
+        Set<User> usersByStax = parseXmlFileWithStax(projectName, payloadURL);
         System.out.println("users by stax:");
         usersByStax.forEach(u -> System.out.println("Name " + u.getValue() + ", email " + u.getEmail()));
+
+        String html = transform(projectName, payloadURL);
+        System.out.println(html);
+
+        try (Writer writer = Files.newBufferedWriter(Paths.get("groupsXslt.html"))) {
+            writer.write(html);
+        }
+    }
+
+    private static String transform(String projectName, URL payloadURL) throws Exception {
+        URL xsl = Resources.getResource("groups.xsl");
+        try (InputStream xmlStream = payloadURL.openStream(); InputStream xslStream = xsl.openStream()) {
+            XsltProcessor processor = new XsltProcessor(xslStream);
+            processor.setParameter("projectName", projectName);
+            return processor.transform(xmlStream);
+        }
     }
 
     private static Set<User> parseXmlFileWithStax(String projectName, URL payloadURL) throws Exception {
