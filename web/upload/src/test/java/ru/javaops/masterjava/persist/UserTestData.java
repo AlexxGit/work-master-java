@@ -23,14 +23,14 @@ public class UserTestData {
         USER1 = new User("User1", "user1@gmail.com", UserFlag.active);
         USER2 = new User("User2", "user2@yandex.ru", UserFlag.active);
         USER3 = new User("User3", "user3@yandex.ru", UserFlag.active);
-        FIST5_USERS = ImmutableList.of(ADMIN, DELETED, FULL_NAME, USER1, USER2);
+        FIRST5_USERS = ImmutableList.of(ADMIN, DELETED, FULL_NAME, USER1, USER2);
     }
 
     public static void setUp() {
         UserDao dao = DBIProvider.getDao(UserDao.class);
         dao.clean();
         DBIProvider.getDBI().useTransaction((conn, status) -> {
-            FIST5_USERS.forEach(dao::insert);
+            FIRST5_USERS.forEach(dao::insert);
             dao.insert(USER3);
         });
     }
